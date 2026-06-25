@@ -55,13 +55,19 @@ export const PostCard = ({
               type="text"
               shape="circle"
               icon={<Pencil size={20} />}
-              onClick={() => navigate(`/posts/${id}/edit`)}
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/posts/${id}/edit`);
+              }}
             />
           </Tooltip>
 
           <Tooltip title="Удалить статью">
             <Button
-              onClick={() => setIsDeleteModalOpen(true)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsDeleteModalOpen(true);
+              }}
               type="text"
               shape="circle"
               icon={<X size={20} />}
@@ -69,41 +75,43 @@ export const PostCard = ({
           </Tooltip>
         </div>
       )}
-      {imageUrl && (
-        <img
-          className={clsx(styles.image, { [styles.imageFull]: isFullPost })}
-          src={imageUrl}
-          alt={title}
-        />
-      )}
-      <div className={styles.wrapper}>
-        <UserInfo {...user} additionalText={createdAt} />
-        <div className={styles.indention}>
-          <h2
-            className={clsx(styles.title, { [styles.titleFull]: isFullPost })}
-          >
-            {isFullPost ? title : <Link to={`/posts/${id}`}>{title}</Link>}
-          </h2>
-          <ul className={styles.tags}>
-            {tags?.map((name) => (
-              <li key={name}>
-                <Link to={`/tag/${name}`}>#{name}</Link>
+      <Link to={`/posts/${id}`} className={styles.link}>
+        {imageUrl && (
+          <img
+            className={clsx(styles.image, { [styles.imageFull]: isFullPost })}
+            src={imageUrl}
+            alt={title}
+          />
+        )}
+        <div className={styles.wrapper}>
+          <UserInfo {...user} additionalText={createdAt} />
+          <div className={styles.indention}>
+            <h2
+              className={clsx(styles.title, { [styles.titleFull]: isFullPost })}
+            >
+              {title}
+            </h2>
+            <ul className={styles.tags}>
+              {tags?.map((name) => (
+                <li key={name}>
+                  <span>#{name}</span>
+                </li>
+              ))}
+            </ul>
+            {children && <div className={styles.content}>{children}</div>}
+            <ul className={styles.postDetails}>
+              <li>
+                <Eye size={18} />
+                <span>{viewsCount}</span>
               </li>
-            ))}
-          </ul>
-          {children && <div className={styles.content}>{children}</div>}
-          <ul className={styles.postDetails}>
-            <li>
-              <Eye size={18} />
-              <span>{viewsCount}</span>
-            </li>
-            <li>
-              <MessageSquare size={18} />
-              <span>{commentsCount}</span>
-            </li>
-          </ul>
+              <li>
+                <MessageSquare size={18} />
+                <span>{commentsCount}</span>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
+      </Link>
 
       {isDeleteModalOpen && (
         <DeletePostModal
