@@ -1,6 +1,7 @@
 $bg-color: #fff;
 
 .root {
+  position: relative;
   background-color: $bg-color;
   border: 1px solid rgba(0, 0, 0, 0.09);
   border-radius: 8px;
@@ -121,8 +122,8 @@ $bg-color: #fff;
 }
 
 .editButtons {
-  position: relative;
-  left: -10px;
+  position: absolute;
+  right: 10px;
   top: 10px;
   display: flex;
   z-index: 10;

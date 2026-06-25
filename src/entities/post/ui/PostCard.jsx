@@ -1,15 +1,13 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Clear';
-import EditIcon from '@mui/icons-material/Edit';
-import EyeIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import CommentIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
+import { Eye, Pencil, X, MessageSquare } from 'lucide-react';
+import { DeletePostModal } from 'features/postCard/ui/DeletePostModal';
 import styles from './PostCard.module.scss';
-import { UserInfo } from '../../../shared/ui';
+import { UserInfo } from 'shared/ui';
 import { PostSkeleton } from './PostSkeleton';
-import { useDeletePostMutation } from '../../../app/api/postApi';
+import { useDeletePostMutation } from 'app/api/postApi';
+import { Button, message, Tooltip } from 'antd';
 
 export const PostCard = ({
   id,
@@ -25,30 +23,50 @@ export const PostCard = ({
   isLoading,
   isEditable,
 }) => {
+  const navigate = useNavigate();
+
   const [deletePost] = useDeletePostMutation();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   if (isLoading) {
     return <PostSkeleton />;
   }
 
-  const onClickRemove = () => {
-    if (window.confirm('Вы действительно хотите удалить статью?')) {
-      deletePost(id);
+  const onDeletePost = async () => {
+    try {
+      await deletePost(id).unwrap();
+      setIsDeleteModalOpen(false);
+      message.success('Пост успешно удален');
+    } catch (e) {
+      message.error('Не удалось удалить пост');
     }
+  };
+
+  const onCancelDeletePost = () => {
+    setIsDeleteModalOpen(false);
   };
 
   return (
     <div className={clsx(styles.root, { [styles.rootFull]: isFullPost })}>
       {isEditable && (
         <div className={styles.editButtons}>
-          <Link to={`/posts/${id}/edit`}>
-            <IconButton color="primary">
-              <EditIcon />
-            </IconButton>
-          </Link>
-          <IconButton onClick={onClickRemove} color="secondary">
-            <DeleteIcon />
-          </IconButton>
+          <Tooltip title="Редактировать статью">
+            <Button
+              type="text"
+              shape="circle"
+              icon={<Pencil size={20} />}
+              onClick={() => navigate(`/posts/${id}/edit`)}
+            />
+          </Tooltip>
+
+          <Tooltip title="Удалить статью">
+            <Button
+              onClick={() => setIsDeleteModalOpen(true)}
+              type="text"
+              shape="circle"
+              icon={<X size={20} />}
+            />
+          </Tooltip>
         </div>
       )}
       {imageUrl && (
@@ -76,16 +94,24 @@ export const PostCard = ({
           {children && <div className={styles.content}>{children}</div>}
           <ul className={styles.postDetails}>
             <li>
-              <EyeIcon />
+              <Eye size={18} />
               <span>{viewsCount}</span>
             </li>
             <li>
-              <CommentIcon />
+              <MessageSquare size={18} />
               <span>{commentsCount}</span>
             </li>
           </ul>
         </div>
       </div>
+
+      {isDeleteModalOpen && (
+        <DeletePostModal
+          open={isDeleteModalOpen}
+          onConfirm={onDeletePost}
+          onCancel={onCancelDeletePost}
+        />
+      )}
     </div>
   );
 };
