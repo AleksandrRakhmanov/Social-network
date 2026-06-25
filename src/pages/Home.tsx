@@ -1,7 +1,6 @@
 import React from 'react';
 import { ClockPlus, Coffee } from 'lucide-react';
-import { Tabs } from 'antd';
-import Grid from '@mui/material/Grid';
+import { Row, Col, Tabs } from 'antd';
 
 import { PostList } from 'widgets/PostList';
 import { TagsWidget } from 'widgets/TagsWidget';
@@ -32,13 +31,16 @@ export const Home = () => {
           };
         })}
       />
-      <Grid container spacing={4}>
-        <PostList
-          items={posts}
-          isLoading={isPostsLoading}
-          isEditable={userData?._id}
-        />
-        <Grid xs={4} item>
+      <Row gutter={[24, 24]}>
+        <Col xs={24} lg={16}>
+          <PostList
+            items={posts}
+            isLoading={isPostsLoading}
+            isEditable={userData?._id}
+          />
+        </Col>
+
+        <Col xs={24} lg={8}>
           <TagsWidget items={tags} isLoading={isTagsLoading} />
           <CommentsWidget
             items={[
@@ -59,8 +61,8 @@ export const Home = () => {
             ]}
             isLoading={false}
           />
-        </Grid>
-      </Grid>
+        </Col>
+      </Row>
     </>
   );
 };
