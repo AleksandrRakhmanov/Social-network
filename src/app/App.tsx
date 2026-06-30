@@ -14,22 +14,24 @@ function App() {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider theme="light" width={250}>
-        <Sidebar />
-      </Sider>
+      <Header />
+      <Layout style={{ flexDirection: 'row' }}>
+        <Sider theme="light" width={250}>
+          <Sidebar />
+        </Sider>
 
-      <Layout>
-        <Header />
-        <Content style={{ padding: '0 24px', marginTop: 24 }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/posts/:id" element={<FullPost />} />
-            <Route path="/posts/:id/edit" element={<AddPost />} />
-            <Route path="/add-post" element={<AddPost />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="register" element={<Registration />} />
-          </Routes>
-        </Content>
+        <Layout>
+          <Content style={{ padding: '0 24px', marginTop: 24 }}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/posts/:id" element={<FullPost />} />
+              <Route path="/posts/:id/edit" element={<AddPost />} />
+              <Route path="/add-post" element={<AddPost />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="register" element={<Registration />} />
+            </Routes>
+          </Content>
+        </Layout>
       </Layout>
     </Layout>
   );

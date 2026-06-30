@@ -1,19 +1,17 @@
 .root {
   background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.05);
-  padding: 10px 0;
-  margin-bottom: 30px;
-}
-
-.inner {
+  padding: 10px 24px;
+  width: 100%;
+  position: relative;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  background-color: #00a5be;
 }
 
 .logo {
-  background-color: black;
-  color: #fff;
+  background-color: rgb(248, 248, 249);
+  color: #020202;
   font-weight: 700;
   line-height: 35px;
   text-transform: uppercase;
@@ -21,9 +19,28 @@
   border-radius: 5px;
   padding: 5px 15px 0 15px;
   text-decoration: none;
+  flex-shrink: 0;
+  z-index: 1;
 
   &:hover {
-    background-color: #4361ee;
+    background-color: #eeeded;
+    color: #020202;
+  }
+}
+
+.search {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
+
+  :global {
+    .ant-input-affix-wrapper {
+      width: 100%;
+    }
   }
 }
 

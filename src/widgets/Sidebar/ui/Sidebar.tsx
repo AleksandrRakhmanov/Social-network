@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   HomeOutlined,
@@ -10,13 +10,16 @@ import {
 } from '@ant-design/icons';
 import { Avatar, Menu } from 'antd';
 import { useGetMeQuery } from 'app/api/authApi';
-import { LogoutButton } from 'features/logout';
+import { LogoutModal } from 'features/logout';
+import { useLogout } from 'features/logout';
 import styles from './Sidebar.module.scss';
 
 const Sidebar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { data: userData } = useGetMeQuery();
+  const { logout } = useLogout();
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const menuItems = [
     {
@@ -39,7 +42,7 @@ const Sidebar: React.FC = () => {
           {
             key: 'logout',
             icon: <LogoutOutlined />,
-            label: <LogoutButton />,
+            label: 'Выйти',
           },
         ]
       : [
@@ -57,7 +60,10 @@ const Sidebar: React.FC = () => {
   ];
 
   const onClickMenuItem = (e: { key: string }) => {
-    if (e.key === 'logout') return;
+    if (e.key === 'logout') {
+      setIsLogoutModalOpen(true);
+      return;
+    }
     navigate(e.key);
   };
 
@@ -70,6 +76,12 @@ const Sidebar: React.FC = () => {
         items={menuItems}
         onClick={onClickMenuItem}
         className={styles.menu}
+      />
+
+      <LogoutModal
+        open={isLogoutModalOpen}
+        onConfirm={logout}
+        onCancel={() => setIsLogoutModalOpen(false)}
       />
 
       {userData && (

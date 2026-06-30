@@ -2,12 +2,15 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  border-color: #4361ee;
+  margin-top: 40px;
 }
 
 .menu {
   flex: 1;
   border-right: 0 !important;
-  margin-top: 64px;
+  border-color: #4361ee;
+  height: 100%;
 }
 
 .userBlock {
